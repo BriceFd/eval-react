@@ -1,0 +1,30 @@
+services:
+  web:
+    image: eltwingo/mns:latest
+    working_dir: /app
+    pull_policy: always
+    ports:
+     - "4555:80" 
+    depends_on:
+     - db
+  db:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME:root
+      - ME_CONFIG_MONGODB_ADMINPASSWORD:root
+    volumes:
+      - mongo-data:/mongo
+      
+  mongo-express:
+    image: mongo-express
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=db
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=false
+      - ME_CONFIG_MONGODB_AUTH_DATABASE=cyberconf
+    depends_on:
+      - db
+    ports:
+      - "9555:8081"
+volumes:
+  mongo-data:
