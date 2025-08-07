@@ -1,0 +1,15 @@
+meta {
+  name: delete conf
+  type: http
+  seq: 9
+}
+
+delete {
+  url: http://localhost:4555/conference
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+}

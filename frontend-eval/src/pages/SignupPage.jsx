@@ -1,6 +1,7 @@
-import React, { useState,useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
+import './SignupPage.css';
 
 export default function SignupPage() {
     const [id, setId] = useState('');
@@ -45,27 +46,62 @@ export default function SignupPage() {
         }
     };
 
-
     if (createdUser) {
         return (
-            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-                <h2>Compte créé !</h2>
-                <p>ID : {createdUser.id}</p>
-                <p>Rôle : {createdUser.role}</p>
+            <div className="success-container">
+                <h2 className="success-title">Compte créé !</h2>
+                <p className="success-info">
+                    <strong>ID :</strong> {createdUser.id}
+                </p>
+                <p className="success-info">
+                    <strong>Rôle :</strong> {createdUser.role}
+                </p>
             </div>
         );
     }
 
     return (
-        <div>
-            <h2>Créer un compte</h2>
-            <input value={id} onChange={e => setId(e.target.value)} placeholder="ID" />
-            <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Mot de passe" />
-            <div>
-                <button onClick={() => handleSignup(false)}>Créer compte utilisateur</button>
-                <button onClick={() => handleSignup(true)}>Créer compte admin</button>
+        <div className="signup-container">
+            <h2 className="signup-title">Créer un compte</h2>
+
+            <div className="signup-form">
+                <input
+                    className="signup-input"
+                    value={id}
+                    onChange={e => setId(e.target.value)}
+                    placeholder="ID utilisateur"
+                />
+
+                <input
+                    className="signup-input"
+                    type="password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    placeholder="Mot de passe"
+                />
+
+                <div className="signup-buttons">
+                    <button
+                        className="signup-button primary"
+                        onClick={() => handleSignup(false)}
+                    >
+                        Créer un compte utilisateur
+                    </button>
+
+                    <button
+                        className="signup-button admin"
+                        onClick={() => handleSignup(true)}
+                    >
+                        Créer un compte admin
+                    </button>
+                </div>
+
+                {error && (
+                    <div className="error-message">
+                        {error}
+                    </div>
+                )}
             </div>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>
     );
 }

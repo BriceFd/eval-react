@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "eval-react",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

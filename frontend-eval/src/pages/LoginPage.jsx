@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../AuthContext';
+import './LoginPage.css';
 
 export default function LoginPage() {
     const [id, setId] = useState('');
@@ -16,13 +17,11 @@ export default function LoginPage() {
                 body: JSON.stringify({ id, password }),
             });
 
-            const data = await response.text(); // le token en texte brut
-            console.log('Réponse login:', data);
+            const rawToken = await response.text();
+            const token = rawToken.replace(/^"|"$/g, '');
 
-            if (response.ok && data) {
-                // Met à jour le contexte (stockage token + user)
-                login(data);
-
+            if (response.ok && token) {
+                login(token);
                 setError('');
             } else {
                 setError('Erreur de connexion');
@@ -34,27 +33,48 @@ export default function LoginPage() {
 
     if (user) {
         return (
-            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-                <h2>Connecté</h2>
-                <p>ID : {user.id}</p>
-                <p>Rôle : {user.role}</p>
-                <button onClick={logout}>Se déconnecter</button>
+            <div className="success-container">
+                <h2 className="success-title">Connecté</h2>
+                <p className="success-info"><strong>ID :</strong> {user.id}</p>
+                <p className="success-info"><strong>Rôle :</strong> {user.role}</p>
+                <button className="logout-button" onClick={logout}>Se déconnecter</button>
             </div>
         );
     }
 
     return (
-        <div>
-            <h2>Se connecter</h2>
-            <input value={id} onChange={e => setId(e.target.value)} placeholder="ID" />
-            <input
-                type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                placeholder="Mot de passe"
-            />
-            <button onClick={handleLogin}>Se connecter</button>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+        <div className="login-container">
+            <h2 className="login-title">Se connecter</h2>
+
+            <div className="login-form">
+                <input
+                    className="login-input"
+                    value={id}
+                    onChange={e => setId(e.target.value)}
+                    placeholder="ID utilisateur"
+                />
+
+                <input
+                    className="login-input"
+                    type="password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    placeholder="Mot de passe"
+                />
+
+                <button
+                    className="login-button primary"
+                    onClick={handleLogin}
+                >
+                    Se connecter
+                </button>
+
+                {error && (
+                    <div className="error-message">
+                        {error}
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
